@@ -93,14 +93,103 @@ const db = require('./models')
 //     })
 // })
 
-db.user.findAll({
-    include: [db.pet]
-}).then(users => {
-    users.forEach(user => {
-        console.log(`${user.firstName}'s pets: `)
-        user.pets.forEach(pet => {
-            console.log(pet.name)
+// db.user.findAll({
+//     include: [db.pet]
+// }).then(users => {
+//     users.forEach(user => {
+//         console.log(`${user.firstName}'s pets: `)
+//         user.pets.forEach(pet => {
+//             console.log(pet.name)
+//         })
+//     })
+//     process.exit()
+// })
+
+// db.pet.findOrCreate({
+//     where: {
+//         name: 'Silly May',
+//         species: 'Mini Aussie',
+//         userId: 1
+//     }
+// }).then(([pet, wasCreated]) => {
+//     db.toy.findOrCreate({
+//         where: {
+//             type: 'stinky bear',
+//             color: 'brown'
+//         }
+//     }).then(([toy, wasCreated]) => {
+//         pet.addToy(toy).then(relationInfo => {
+//             console.log(`${toy.type} added to ${pet.name}`)
+//             process.exit()
+//         })
+//     })
+// })
+
+// db.toy.findOne({
+//     where: {type: "stinky bear"}
+// }).then(toy => {
+//     toy.getPets().then(pets => {
+//         console.log(`🏆 ${pets.length} pet(s) love(s) the ${toy.color, toy.type}. 🏆`)
+//         process.exit()
+//     })
+// })
+
+// db.toy.findOrCreate({
+//     where: {type: 'ball', color: 'green'}
+// }).then(([toy, wasCreated]) => {
+//     toy.getPets().then(pets => {
+//         if(pets.length > 0){
+//             pets.forEach(pet => {
+//                 console.log(`🏆 ${pet.name} loves the ${toy.color, toy.type}. 🏆`)
+//                 process.exit()
+//             })
+//         } else {
+//             db.pet.findOrCreate({
+//                 where: {
+//                     name: 'Ruby Tuesday',
+//                     species: 'Toy Aussie'
+//                 }
+//             }).then(([pet, wasCreated]) => {
+//                 toy.addPet(pet).then(relationInfo => {
+//                     console.log(`${pet.name} has faved the ${toy.color} ${toy.type} toy.`)
+//                     process.exit()
+//                 })
+//             })
+//         }
+//     })
+// })
+
+// db.pet.findOne({
+//     where: {name: 'Ruby Tuesday'}
+// }).then(pet => {
+//     pet.getToys().then(toys => {
+//         toys.forEach(toy => {
+//             console.log(`${pet.name} loves their ${toy.color} ${toy.type}.`)
+//             process.exit()
+//         })
+//     })
+// })
+
+// db.pet.findOne({
+//     where: {
+//         name: 'Silly May'
+//     },
+//     include: [db.user, db.toy]
+// }).then(pet => {
+//     console.log(pet)
+//     // pet.toys.forEach(toy => {
+//     //     console.log(`${pet.user.firstName}'s pet ${pet.name}loves their ${toy.color} ${toy.type}`)
+//     // })
+//     process.exit()
+// })
+
+db.user.findByPk(1, { include: [db.pet] })
+.then(user => {
+    user.pets.forEach(pet => {
+        pet.getToys().then(toys => {
+            toys.forEach(toy => {
+                console.log(`${user.firstName}'s pet ${pet.name} loves their ${toy.color} ${toy.type}.`)
+            })
         })
     })
-    process.exit()
 })
